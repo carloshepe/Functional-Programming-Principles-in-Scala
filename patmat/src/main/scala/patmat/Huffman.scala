@@ -216,21 +216,41 @@ object Huffman {
    * the resulting list of characters.
    */
   def decode(tree: CodeTree, bits: List[Bit]): List[Char] = {
-
-    def lookForBit(bit: Bit, chars: List[Char]): List[Char] = {
-      tree.
-    }
-
-    def decodeLoop(bits: List[Bit], chars: List[Char]): List[Char] = {
+    def decodeLoop(treeLoop: CodeTree, bits: List[Bit], chars: List[Char]): List[Char] = {
+      println(bits + ":" + treeLoop)
       if (bits.isEmpty) {
         chars
-      } else {
-        decodeLoop(bits.tail, lookForBit(bits.head, chars))
       }
+      else {
+        if (bits.head == 0) {
+          treeLoop match {
+            case Fork(ll, r, ch, w) => {
+              ll match {
+                case Fork(l, r, ch, w) => decodeLoop(ll, bits.tail, chars)
+                case Leaf(c, w) => decodeLoop(tree, bits.tail, chars :+ c)
+              }
+
+            }
+            case Leaf(c, w) => decodeLoop(tree, bits.tail, chars :+ c)
+
+          }
+        } else {
+          treeLoop match {
+            case Fork(l, rr, ch, w) => {
+              rr match {
+                case Fork(l, r, ch, w) => decodeLoop(rr, bits.tail, chars)
+                case Leaf(c, w) => decodeLoop(tree, bits.tail, chars :+ c)
+              }
+
+            }
+            case Leaf(c, w) => decodeLoop(tree, bits.tail, chars :+ c)
+          }
+        }
+      }
+
     }
 
-    decodeLoop(bits, Nil)
-
+    decodeLoop(tree, bits, Nil)
   }
 
   /**

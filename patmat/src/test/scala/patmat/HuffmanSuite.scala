@@ -82,8 +82,9 @@ class HuffmanSuite extends FunSuite {
   }
 
   test("decoding") {
-    val textoPrueba: List[Bit] = List(117110, 13822)
-    assert(decode(frenchCode, textoPrueba) === List('a', 'b'))
+    assert(decode(frenchCode, List(0, 0, 0)) === List('s'))
+    assert(decode(frenchCode, List(0, 0, 1, 0)) === List('d'))
+    assert(decode(frenchCode, List(0, 0, 0, 0, 0, 1, 0)) === List('s', 'd'))
   }
 
   test("decode and encode a very short text should be identity") {
