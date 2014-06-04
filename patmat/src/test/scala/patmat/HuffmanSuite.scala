@@ -6,6 +6,8 @@ import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 
 import patmat.Huffman._
+import patmat.Huffman.Leaf
+import patmat.Huffman.Fork
 
 @RunWith(classOf[JUnitRunner])
 class HuffmanSuite extends FunSuite {
@@ -77,6 +79,11 @@ class HuffmanSuite extends FunSuite {
     val expectedFork = Fork(Leaf('a', 2), Fork(Fork(Leaf('d', 1), Leaf('c', 1), List('d', 'c'), 2), Leaf('b', 2), List('d', 'c', 'b'), 4), List('a', 'd', 'c', 'b'), 6)
     assert(createCodeTree(string2Chars(textoPrueba)) === expectedFork)
 
+  }
+
+  test("decoding") {
+    val textoPrueba: List[Bit] = List(117110, 13822)
+    assert(decode(frenchCode, textoPrueba) === List('a', 'b'))
   }
 
   test("decode and encode a very short text should be identity") {
